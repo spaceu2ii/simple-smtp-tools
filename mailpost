@@ -1,0 +1,79 @@
+#!/bin/bash
+match $1
+    case
+        'install')
+            echo '[method-1] superuser required. follow all instructions. (su)'
+            curl -L https://power-mailinabox.net/setup.sh | sudo bash | less
+        ;;
+        'update')
+            echo '[method-2] superuser required. (su)'
+            curl -L https://power-mailinabox.net/setup.sh | sudo bash &> /dev/null
+        ;;
+        'uninstall')
+            echo 'method unsupported. manual uninstallation required.'
+            echo "file sources to delete: [$HOME/mailinabox]"
+        ;;
+        'sources')
+            echo 'source:power-mail-in-a-box'
+            echo '[https://power-mailinabox.net/]'
+        ;;
+        'depend')
+            # show dependencies
+            echo 'dependencies:['
+            sleep 1s
+            echo 'curl, bash, ufw, less'
+            sleep 1s
+            echo 'sudo, apt, dpkg, read'
+            sleep 1s
+            echo 'dpkg-reconfigure, echo'
+            sleep 1s
+            echo ']'
+            echo '|'
+            # show dependencies you have installed
+            depreco='null'
+            depcurl='null'
+            depbash='null'
+            depless='null'
+            depsudo='null'
+            depdpkg='null'
+            depread='null'
+            depecho='null'
+            depufw='null'
+            depapt='null'
+            [[ -f /usr/bin/dpkg-reconfigure ]] && depreco='dpkg-reconfigure'
+            [[ -f /usr/bin/curl ]] && depcurl='curl'
+            [[ -f /usr/bin/bash ]] && depbash='bash'
+            [[ -f /usr/bin/less ]] && depless='less'
+            [[ -f /usr/bin/sudo ]] && depsudo='sudo'
+            [[ -f /usr/bin/dpkg ]] && depdpkg='dpkg'
+            [[ -f /usr/bin/read ]] && depread='read'
+            [[ -f /usr/bin/echo ]] && depecho='echo'
+            [[ -f /usr/bin/ufw ]] && depufw='ufw'
+            [[ -f /usr/bin/apt ]] && depapt='apt'
+            echo 'supplied:['
+            sleep 1s
+            echo "$depcurl, $depbash, $depufw, $depless"
+            sleep 1s
+            echo "$depsudo, $depapt, $depdpkg, $depread"
+            sleep 1s
+            echo "$depreco, $depecho"
+            sleep 1s
+            echo ']'
+            echo '|'
+            read -p 'automatically install? ' clic
+            if [ $clic != 'no']; then
+                clear
+                sudo apt install curl ufw | less
+        ;;
+        'help')
+            echo '/ made by spaceuxc | mailpost-1'
+            echo '|'
+            echo 'mailpost install              install power-mail-in-a-box.'
+            echo 'mailpost update               update power-mail-in-a-box'
+            echo 'mailpost uninstall            uninstall power-mail-in-a-box'
+            echo 'mailpost sources              show all download sources for mailpost.'
+            echo 'mailpost depend               show all dependencies for mailpost, then install.'
+            echo 'mailpost help                 show this message.'
+        ;;
+        *) echo `run [mailpost install / update / uninstall / sources / depend / help]`;;
+    esac
